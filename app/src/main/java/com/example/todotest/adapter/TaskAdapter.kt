@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todotest.data.Task
 import com.example.todotest.databinding.ItemTaskBinding
-import java.util.Date
+import com.example.todotest.utils.format
 
 class TaskAdapter(
     private var items: List<Task> = emptyList(),
@@ -32,18 +32,17 @@ class TaskAdapter(
     inner class ViewHolder(private val binding: ItemTaskBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(task: Task) {
             binding.tvTitle.text = task.title
-            //b.tvSubtitle.text = task.subtitle ?: ""
-            binding.chkDone.isChecked = task.isCompleted
-            //b.tvDate.text= task.dateTime?.format() ?: "No date"
-
-            // strikethrough
-            binding.tvTitle.paintFlags = if (task.isCompleted) {
-                binding.tvTitle.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+            binding.tvSubtitle.text = task.subtitle ?: ""
+            binding.tvDate.text= task.dateTime?.format() ?: "No date"
+            binding.chkDone.setOnCheckedChangeListener(null)
+            if (task.isCompleted) {
+                binding.tvTitle.paintFlags = binding.tvTitle.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                binding.chkDone.isChecked = true
             } else {
-                binding.tvTitle.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+                binding.tvTitle.paintFlags = binding.tvTitle.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+                binding.chkDone.isChecked = false
             }
 
-            binding.chkDone.setOnCheckedChangeListener(null)
             binding.chkDone.setOnCheckedChangeListener { _, isChecked ->
                 task.isCompleted = isChecked
                 onChecked(task)
@@ -53,10 +52,6 @@ class TaskAdapter(
                 onItemClick(task)
             }
         }
-    }
-    fun Date.format(): String {
-        val sdf = java.text.SimpleDateFormat("dd MMM yyyy, hh:mm a")
-        return sdf.format(this)
     }
 }
 

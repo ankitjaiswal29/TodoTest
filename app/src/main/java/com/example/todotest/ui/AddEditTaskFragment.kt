@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.todotest.utils.format
 import java.util.Date
 
 class AddEditTaskFragment : Fragment() {
@@ -56,8 +57,8 @@ class AddEditTaskFragment : Fragment() {
             }
         }else {
             currentTask = null
-            //val dt = currentTask?.dateTime ?: Date()
-            //binding.tvDateTime.text=dt.format()
+            val dt = currentTask?.dateTime ?: Date()
+            binding.tvDateTime.text=dt.format()
             activity?.invalidateOptionsMenu()
         }
 
@@ -69,19 +70,17 @@ class AddEditTaskFragment : Fragment() {
             }
 
             val subtitle = binding.etSubtitle.text.toString().trim()
-            //val dt = currentTask?.dateTime // may be set by pickDateTime or left null
-            //val dt = currentTask?.dateTime ?: Date()
+            val dt = currentTask?.dateTime ?: Date()
             if (currentTask == null) {
-                //val newTask = Task(title = title, subtitle = if (subtitle.isEmpty()) null else subtitle, dateTime = dt)
-                val newTask = Task(title = title)
+                val newTask = Task(title = title, subtitle = if (subtitle.isEmpty()) null else subtitle, dateTime = dt)
                 vm.insertTask(newTask) {
                     // pop back
                     parentFragmentManager.popBackStack()
                 }
             } else {
                 currentTask!!.title = title
-                //currentTask!!.subtitle = if (subtitle.isEmpty()) null else subtitle
-                //currentTask!!.dateTime = dt
+                currentTask!!.subtitle = if (subtitle.isEmpty()) null else subtitle
+                currentTask!!.dateTime = dt
                 vm.updateTask(currentTask!!) {
                     parentFragmentManager.popBackStack()
                 }
@@ -92,21 +91,15 @@ class AddEditTaskFragment : Fragment() {
     private fun populateFields(task: Task) {
         currentTask = task
         binding.etTitle.setText(task.title)
-        //binding.etSubtitle.setText(task.subtitle ?: "")
-//        if (task.dateTime != null) {
-//            //binding.tvDateTime.text = task.dateTime.toString()
-//            binding.tvDateTime.text = task.dateTime?.format() ?: "No date"
-//
-//        }else{
-//            binding.tvDateTime.text = task.dateTime?.format() ?: "No date"
-//        }
+        binding.etSubtitle.setText(task.subtitle ?: "")
+        if (task.dateTime != null) {
+            binding.tvDateTime.text = task.dateTime?.format() ?: "No date"
+
+        }else{
+            binding.tvDateTime.text = task.dateTime?.format() ?: "No date"
+        }
         activity?.invalidateOptionsMenu()
     }
-    fun Date.format(): String {
-        val sdf = java.text.SimpleDateFormat("dd MMM yyyy, hh:mm a")
-        return sdf.format(this)
-    }
-
 
     // delete menu
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

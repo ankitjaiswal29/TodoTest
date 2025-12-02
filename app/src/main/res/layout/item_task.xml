@@ -46,7 +46,6 @@
             android:textColor="#777777"
             android:maxLines="1"
             android:ellipsize="end"
-            android:visibility="gone"
             app:layout_constraintStart_toStartOf="@id/tvTitle"
             app:layout_constraintTop_toBottomOf="@id/tvTitle"
             app:layout_constraintEnd_toEndOf="parent" />
@@ -59,7 +58,6 @@
             android:text="01 Jan 2025"
             android:textSize="12sp"
             android:textColor="#9E9E9E"
-            android:visibility="gone"
             app:layout_constraintStart_toStartOf="@id/tvTitle"
             app:layout_constraintTop_toBottomOf="@id/tvSubtitle"
             app:layout_constraintEnd_toEndOf="parent"

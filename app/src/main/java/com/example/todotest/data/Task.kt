@@ -8,8 +8,8 @@ data class Task(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     var title: String,
-    //var subtitle: String? = null,
-    //var dateTime: Date? = null,
+    var subtitle: String? = null,
+    var dateTime: Date? = null,
     var isCompleted: Boolean = false
 )
 

@@ -15,7 +15,7 @@ class TaskListFragment : Fragment() {
 
     private var _binding: FragmentTaskListBinding? = null
     private val binding get() = _binding!!
-    private lateinit var vm: TaskViewModel
+    private lateinit var viewModel: TaskViewModel
     private lateinit var adapter: TaskAdapter
 
     companion object {
@@ -27,7 +27,7 @@ class TaskListFragment : Fragment() {
         val dao = AppDatabase.getInstance(requireContext()).taskDao()
         val repo = TaskRepository(dao)
         val factory = TaskViewModelFactory(repo)
-        vm = ViewModelProvider(requireActivity(), factory).get(TaskViewModel::class.java)
+        viewModel = ViewModelProvider(requireActivity(), factory).get(TaskViewModel::class.java)
         setHasOptionsMenu(false)
     }
 
@@ -38,7 +38,7 @@ class TaskListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         adapter = TaskAdapter(onChecked = { task ->
-            vm.updateTask(task)
+            viewModel.updateTask(task)
         }, onItemClick = { task ->
             // Open add/edit fragment with task id
             parentFragmentManager.beginTransaction()
@@ -57,7 +57,7 @@ class TaskListFragment : Fragment() {
                 .commit()
         }
 
-        vm.tasks.observe(viewLifecycleOwner) { list ->
+        viewModel.tasks.observe(viewLifecycleOwner) { list ->
             adapter.submitList(list)
         }
     }
